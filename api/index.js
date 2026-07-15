@@ -45,7 +45,12 @@ async function bootstrapApp() {
 
 module.exports = async function handler(req, res) {
   if (!cachedApp) {
-    cachedApp = await bootstrapApp();
+    try {
+      cachedApp = await bootstrapApp();
+    } catch (err) {
+      console.error('[heyama-api] bootstrap failed:', err);
+      throw err;
+    }
   }
   return cachedApp(req, res);
 };
