@@ -3,7 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 export type ObjectDocument = HydratedDocument<ObjectEntity>;
 
-// on l'appelle ObjectEntity pour pas rentrer en conflit avec le Object global de JS
+// we name it ObjectEntity to avoid clashing with the global JS Object
 @Schema({ timestamps: { createdAt: true, updatedAt: false } })
 export class ObjectEntity {
   @Prop({ required: true, trim: true })

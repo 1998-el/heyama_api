@@ -23,8 +23,8 @@ export class SignedUrlService {
     });
   }
 
-  // l'URL stockée en base est l'URL publique (https://.../file/<bucket>/<key>) ;
-  // on en extrait la clé d'objet B2 (objects/xxx.png) pour signer
+  // the url stored in the database is the public url (https://.../file/<bucket>/<key>) ;
+  // we extract the B2 object key (objects/xxx.png) from it to sign
   private extractKey(imageUrl: string): string {
     if (this.publicUrl && imageUrl.startsWith(this.publicUrl)) {
       return imageUrl.slice(this.publicUrl.length + 1);
@@ -46,8 +46,8 @@ export class SignedUrlService {
         { expiresIn },
       );
     } catch (err) {
-      this.logger.error(`échec génération URL signée pour ${key}`, err as Error);
-      // en cas de pépin on rend l'URL d'origine plutôt que de planter la requête
+      this.logger.error(`failed to generate signed URL for ${key}`, err as Error);
+      // on failure we return the original url instead of crashing the request
       return imageUrl;
     }
   }

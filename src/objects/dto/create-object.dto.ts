@@ -6,7 +6,7 @@ export class CreateObjectDto {
   @MaxLength(120)
   title: string;
 
-  // optionnel, on met une chaine vide par défaut si rien n'est envoyé
+  // optional, defaults to an empty string if nothing is provided
   @IsOptional()
   @IsString()
   @MaxLength(2000)

@@ -17,7 +17,7 @@ export class ObjectsService {
     private readonly signedUrl: SignedUrlService,
   ) {}
 
-  // transforme un objet (doc mongoose) en objet "public" avec une URL signée à la place de l'URL brute
+  // turn a mongoose doc into a "public" object, swapping the raw url for a signed one
   private async toPublic(object: ObjectDocument): Promise<Record<string, unknown>> {
     const plain = object.toObject();
     return {
@@ -28,7 +28,7 @@ export class ObjectsService {
 
   async create(dto: CreateObjectDto, file?: Express.Multer.File) {
     if (!file) {
-      // l'image est obligatoire d'après le cahier des charges, pas de fallback ici
+      // image is required per spec, no fallback here
       throw new BadRequestException("l'image est obligatoire");
     }
 
@@ -51,7 +51,7 @@ export class ObjectsService {
     return Promise.all(objects.map((object) => this.toPublic(object)));
   }
 
-  // un id invalide (ex: "undefined" envoyé par le front) ne doit pas planter en 500 CastError
+  // an invalid id (e.g. "undefined" sent by the frontend) must not crash with a 500 CastError
   private assertValidId(id: string) {
     if (!isValidObjectId(id)) {
       throw new BadRequestException(`id invalide: ${id}`);
@@ -73,8 +73,8 @@ export class ObjectsService {
       throw new NotFoundException(`objet ${id} introuvable`);
     }
 
-    // deleteImage avale ses propres erreurs (cf upload.service), donc on continue
-    // même si B2 répond mal, on veut pas d'objet fantôme qui traine en base
+    // deleteImage swallows its own errors (see upload.service), so we continue
+    // even if B2 fails to respond, we don't want a ghost object lingering in the database
     await this.uploadService.deleteImage(found.imageUrl);
     await this.objectModel.findByIdAndDelete(id).exec();
 

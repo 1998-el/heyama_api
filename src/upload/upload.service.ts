@@ -26,7 +26,7 @@ export class UploadService {
   }
 
   async uploadImage(file: Express.Multer.File): Promise<string> {
-    // on garde l'extension d'origine, le reste du nom on s'en fiche
+    // keep the original extension; we don't care about the rest of the filename
     const ext = file.originalname.split('.').pop();
     const key = `objects/${Date.now()}-${uuid()}.${ext}`;
 
@@ -40,19 +40,19 @@ export class UploadService {
         }),
       );
     } catch (err) {
-      this.logger.error(`upload B2 raté pour ${key}`, err as Error);
-      throw new InternalServerErrorException("l'upload de l'image a échoué");
+      this.logger.error(`B2 upload failed for ${key}`, err as Error);
+      throw new InternalServerErrorException("image upload failed");
     }
 
     return `${this.publicUrl}/${key}`;
   }
 
   async deleteImage(imageUrl: string): Promise<void> {
-    // on retrouve la clé à partir de l'url publique, tout ce qui vient après /objects/
+    // recover the key from the public url, everything after /objects/
     const marker = 'objects/';
     const idx = imageUrl.indexOf(marker);
     if (idx === -1) {
-      this.logger.warn(`impossible de retrouver la clé B2 depuis ${imageUrl}, on skip`);
+      this.logger.warn(`could not recover the B2 key from ${imageUrl}, skipping`);
       return;
     }
     const key = imageUrl.substring(idx);
@@ -65,9 +65,9 @@ export class UploadService {
         }),
       );
     } catch (err) {
-      // on log mais on casse pas la suppression Mongo pour autant, l'image orpheline
-      // c'est moins grave qu'un objet fantôme en base
-      this.logger.error(`suppression B2 ratée pour ${key}`, err as Error);
+      // we log but don't break the Mongo deletion for all that; an orphan image
+      // is less harmful than a ghost object left in the database
+      this.logger.error(`B2 deletion failed for ${key}`, err as Error);
     }
   }
 }

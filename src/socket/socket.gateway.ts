@@ -8,8 +8,8 @@ import { Logger } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
-  // sur Vercel (serverless) on n'ouvre pas de port dédié : pas de WebSocket possible,
-  // on évite juste de tenter d'écouter sur SOCKET_PORT et de faire planter le boot
+  // on Vercel (serverless) we don't open a dedicated port: WebSockets aren't possible,
+  // we just avoid trying to listen on SOCKET_PORT and crashing the boot
   port: process.env.VERCEL ? undefined : Number(process.env.SOCKET_PORT) || 3001,
   cors: {
     origin: (process.env.CORS_ORIGINS ?? 'http://localhost:3000').split(','),
@@ -22,14 +22,14 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger = new Logger(SocketGateway.name);
 
   handleConnection(client: Socket) {
-    this.logger.log(`client connecté: ${client.id}`);
+    this.logger.log(`client connected: ${client.id}`);
   }
 
   handleDisconnect(client: Socket) {
-    this.logger.log(`client déconnecté: ${client.id}`);
+    this.logger.log(`client disconnected: ${client.id}`);
   }
 
-  // ces deux là sont appelées par ObjectsService, pas par le front directement
+  // these two are called by ObjectsService, not directly by the frontend
   notifyObjectCreated(payload: unknown) {
     this.server.emit('object-created', payload);
   }
