@@ -14,10 +14,17 @@ async function bootstrapApp() {
     new ExpressAdapter(expressApp),
   );
 
-  const origins = (process.env.CORS_ORIGINS ?? 'http://localhost:3000').split(',');
+  const defaultOrigins = [
+    'https://heyama-portal.vercel.app',
+    'http://localhost:3000',
+    'https://heyama-dek9bcaw1-charly-pierre-mounkams-projects.vercel.app',
+  ];
+  const origins = (process.env.CORS_ORIGINS ?? defaultOrigins.join(',')).split(',');
   app.enableCors({
     origin: origins,
-    methods: ['GET', 'POST', 'DELETE', 'PUT'],
+    methods: ['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
   });
 
   app.useGlobalPipes(
