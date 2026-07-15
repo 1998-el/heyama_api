@@ -1,14 +1,13 @@
-import 'reflect-metadata';
-import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import type { Express } from 'express';
-import express from 'express';
-import { AppModule } from '../src/app.module';
+require('reflect-metadata');
+const { NestFactory } = require('@nestjs/core');
+const { ValidationPipe } = require('@nestjs/common');
+const { ExpressAdapter } = require('@nestjs/platform-express');
+const express = require('express');
+const { AppModule } = require('../dist/src/app.module');
 
-let cachedApp: Express;
+let cachedApp;
 
-async function bootstrapApp(): Promise<Express> {
+async function bootstrapApp() {
   const expressApp = express();
   const app = await NestFactory.create(
     AppModule,
@@ -37,9 +36,9 @@ async function bootstrapApp(): Promise<Express> {
   return expressApp;
 }
 
-export default async function handler(req: any, res: any) {
+module.exports = async function handler(req, res) {
   if (!cachedApp) {
     cachedApp = await bootstrapApp();
   }
   return cachedApp(req, res);
-}
+};

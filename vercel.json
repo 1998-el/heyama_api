@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "buildCommand": "pnpm install",
+  "buildCommand": "pnpm install && pnpm build",
   "framework": null,
   "outputDirectory": "public",
   "functions": {
-    "api/index.ts": {
+    "api/index.js": {
       "maxDuration": 30
     }
   },
