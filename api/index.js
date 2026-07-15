@@ -3,7 +3,7 @@ const { NestFactory } = require('@nestjs/core');
 const { ValidationPipe } = require('@nestjs/common');
 const { ExpressAdapter } = require('@nestjs/platform-express');
 const express = require('express');
-const { AppModule } = require('../dist/src/app.module');
+const { AppModule } = require('../dist/app.module');
 
 let cachedApp;
 
