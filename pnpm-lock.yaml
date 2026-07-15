@@ -44,6 +44,9 @@ importers:
       cloudflare:
         specifier: ^7.0.0
         version: 7.0.0
+      express:
+        specifier: ^4.18.2
+        version: 4.22.1
       mongodb:
         specifier: ^7.5.0
         version: 7.5.0
