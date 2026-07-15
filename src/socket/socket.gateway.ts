@@ -8,7 +8,9 @@ import { Logger } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
-  port: Number(process.env.SOCKET_PORT) || 3001,
+  // sur Vercel (serverless) on n'ouvre pas de port dédié : pas de WebSocket possible,
+  // on évite juste de tenter d'écouter sur SOCKET_PORT et de faire planter le boot
+  port: process.env.VERCEL ? undefined : Number(process.env.SOCKET_PORT) || 3001,
   cors: {
     origin: (process.env.CORS_ORIGINS ?? 'http://localhost:3000').split(','),
   },
