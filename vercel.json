@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "pnpm install --frozen-lockfile=false && pnpm build",
+  "buildCommand": "pnpm install",
   "framework": null,
   "functions": {
     "api/index.ts": {
