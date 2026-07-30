@@ -1,9 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
+import * as express from 'express';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(cookieParser());
+  app.use(express.json({ limit: '10mb' }));
+  app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
   // ============================================
   // CORS - Allowed origins
@@ -59,7 +64,7 @@ async function bootstrap() {
       'Access-Control-Allow-Credentials',
     ],
     credentials: true,
-    maxAge: 86400, // 24 hours
+    maxAge: 86400,
     preflightContinue: false,
     optionsSuccessStatus: 204,
   });
